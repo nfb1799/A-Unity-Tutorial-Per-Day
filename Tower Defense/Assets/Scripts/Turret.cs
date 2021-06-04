@@ -31,10 +31,12 @@ public class Turret : MonoBehaviour
 
     void UpdateTarget()
     {
+        // Get a reference to all enemies
         GameObject[] enemies = GameObject.FindGameObjectsWithTag(enemyTag);
         float shortestDistance = Mathf.Infinity;
         GameObject nearestEnemy = null;
 
+        // Find the enemy nearest the turret
         foreach (GameObject enemy in enemies)
         {
             float distanceToEnemy = Vector3.Distance(transform.position, enemy.transform.position);
@@ -45,6 +47,7 @@ public class Turret : MonoBehaviour
             }
         }
 
+        // Set the target to the nearest enemy if there is one in range
         if(nearestEnemy != null && shortestDistance <= range)
         {
             target = nearestEnemy.transform;
@@ -63,6 +66,7 @@ public class Turret : MonoBehaviour
         Vector3 rotation = Quaternion.Lerp(partToRotate.rotation, lookRotation, Time.deltaTime * turnSpeed).eulerAngles;
         partToRotate.rotation = Quaternion.Euler(0f, rotation.y, 0f);
 
+        // Shoots a bullet every 1s and resets the fire countdown
         if (fireCountdown <= 0f)
         {
             Shoot();
@@ -74,15 +78,18 @@ public class Turret : MonoBehaviour
 
     void Shoot()
     {
+        // Gets a reference to the bullet script
         GameObject bulletGO = (GameObject) Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
         Bullet bullet = bulletGO.GetComponent<Bullet>();
 
+        // Sets the bullets target to the nearest enemy in range
         if(bullet != null)
         {
             bullet.Seek(target);
         }
     }
 
+    // Draws a red wireframe around the active turret to represent its range
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;

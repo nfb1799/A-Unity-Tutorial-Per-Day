@@ -22,23 +22,27 @@ public class Bullet : MonoBehaviour
             return;
         }
 
-        Vector3 dir = target.position - transform.position;
+        Vector3 dir = target.position - transform.position; // Target Pos - Current Pos = Direction to travel (and distance)
         float distanceThisFrame = speed * Time.deltaTime;
 
+        // If distance between bullet and target is less than distance to travel, there is a hit
         if(dir.magnitude <= distanceThisFrame)
         {
             HitTarget();
             return;
         }
 
+        // Move the bullet towards the target in world space
         transform.Translate(dir.normalized * distanceThisFrame, Space.World);
     }
 
     void HitTarget()
     {
+        // Instantiate the particle effect and destroy it after 2s
         GameObject effectIns = (GameObject) Instantiate(impactEffect, transform.position, transform.rotation);
         Destroy(effectIns, 2f);
 
+        // Destroy the target and the bullet
         Destroy(target.gameObject);
         Destroy(gameObject);
     }

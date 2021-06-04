@@ -18,6 +18,7 @@ public class WaveSpawner : MonoBehaviour
 
     void Update()
     {
+        // Spawns a wave every 5s using coroutines
         if(countdown <= 0f)
         {
             StartCoroutine(SpawnWave());
@@ -26,9 +27,11 @@ public class WaveSpawner : MonoBehaviour
 
         countdown -= Time.deltaTime;
 
+        // Updates the UI text
         waveCountdownText.text = Mathf.Round(countdown).ToString();
     }
 
+    // Spawns a certain number of enemies each wave with a 0.5s wait between
     IEnumerator SpawnWave()
     {
         waveIndex++;
@@ -40,6 +43,7 @@ public class WaveSpawner : MonoBehaviour
         }
     }
 
+    // Spawns an enemy at the start point
     void SpawnEnemy()
     {
         Instantiate(enemyPrefab, spawnPoint.position, spawnPoint.rotation);
