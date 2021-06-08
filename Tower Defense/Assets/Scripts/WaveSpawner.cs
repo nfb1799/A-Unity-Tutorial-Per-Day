@@ -27,8 +27,10 @@ public class WaveSpawner : MonoBehaviour
 
         countdown -= Time.deltaTime;
 
+        countdown = Mathf.Clamp(countdown, 0f, Mathf.Infinity);
+
         // Updates the UI text
-        waveCountdownText.text = Mathf.Round(countdown).ToString();
+        waveCountdownText.text = string.Format("{0:00.00}", countdown);
     }
 
     // Spawns a certain number of enemies each wave with a 0.5s wait between
