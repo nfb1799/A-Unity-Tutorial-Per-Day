@@ -20,19 +20,19 @@ public class CameraController : MonoBehaviour
         if (!doMovement)
             return;
 
-        if (Input.GetKey("w") || Input.mousePosition.y >= Screen.height - panBorderThickness) //mousePosition is relative to bottom-left corner
+        if (Input.GetKey("w") /*|| Input.mousePosition.y >= Screen.height - panBorderThickness*/) //mousePosition is relative to bottom-left corner
         {
             transform.Translate(Vector3.forward * panSpeed * Time.deltaTime, Space.World);
         }
-        if (Input.GetKey("s") || Input.mousePosition.y <= panBorderThickness) //mousePosition is relative to bottom-left corner
+        if (Input.GetKey("s") /*|| Input.mousePosition.y <= panBorderThickness*/) //mousePosition is relative to bottom-left corner
         {
             transform.Translate(Vector3.back * panSpeed * Time.deltaTime, Space.World);
         }
-        if (Input.GetKey("d") || Input.mousePosition.x >= Screen.width - panBorderThickness) //mousePosition is relative to bottom-left corner
+        if (Input.GetKey("d") /*|| Input.mousePosition.x >= Screen.width - panBorderThickness*/) //mousePosition is relative to bottom-left corner
         {
             transform.Translate(Vector3.right * panSpeed * Time.deltaTime, Space.World);
         }
-        if (Input.GetKey("a") || Input.mousePosition.x <= panBorderThickness) //mousePosition is relative to bottom-left corner
+        if (Input.GetKey("a") /*|| Input.mousePosition.x <= panBorderThickness*/) //mousePosition is relative to bottom-left corner
         {
             transform.Translate(Vector3.left * panSpeed * Time.deltaTime, Space.World);
         }
