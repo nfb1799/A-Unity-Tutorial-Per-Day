@@ -6,20 +6,28 @@ public class Turret : MonoBehaviour
 {
     public Transform target;
     
-    [Header("Attributes")]
+    [Header("General")]
 
     public float range = 15f;
+
+    [Header("Use Bullets (default)")]
+
     public float fireRate = 1f;
+    public GameObject bulletPrefab;
     private float fireCountdown = 0f;
 
-    [Header("UnitySetupFields")]
+    [Header("Use Laser")]
 
-    private string enemyTag = "Enemy";
+    public bool useLaser = false;
+    public LineRenderer lineRenderer;
+
+    [Header("Unity Setup Fields")]
+
+    public string enemyTag = "Enemy";
 
     public Transform partToRotate;
     public float turnSpeed = 10f;
 
-    public GameObject bulletPrefab;
     public Transform firePoint;
     
 
@@ -58,22 +66,31 @@ public class Turret : MonoBehaviour
     void Update()
     {
         if (target == null)
-            return;
-
-        // Target lock-on
-        Vector3 dir = target.position - transform.position;
-        Quaternion lookRotation = Quaternion.LookRotation(dir);
-        Vector3 rotation = Quaternion.Lerp(partToRotate.rotation, lookRotation, Time.deltaTime * turnSpeed).eulerAngles;
-        partToRotate.rotation = Quaternion.Euler(0f, rotation.y, 0f);
-
-        // Shoots a bullet every 1s and resets the fire countdown
-        if (fireCountdown <= 0f)
         {
-            Shoot();
-            fireCountdown = 1f / fireRate;
+            if(useLaser)
+            {
+                if (lineRenderer.enabled)
+                    lineRenderer.enabled = false;
+            }
+            return;
         }
 
-        fireCountdown -= Time.deltaTime;
+        LockOnTarget();
+
+        if (useLaser)
+        {
+            Laser();
+        } else
+        {
+            // Shoots a bullet every 1s and resets the fire countdown
+            if (fireCountdown <= 0f)
+            {
+                Shoot();
+                fireCountdown = 1f / fireRate;
+            }
+
+            fireCountdown -= Time.deltaTime;
+        }
     }
 
     void Shoot()
@@ -94,5 +111,23 @@ public class Turret : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, range);
+    }
+
+    void LockOnTarget()
+    {
+        // Target lock-on
+        Vector3 dir = target.position - transform.position;
+        Quaternion lookRotation = Quaternion.LookRotation(dir);
+        Vector3 rotation = Quaternion.Lerp(partToRotate.rotation, lookRotation, Time.deltaTime * turnSpeed).eulerAngles;
+        partToRotate.rotation = Quaternion.Euler(0f, rotation.y, 0f);
+    }
+
+    void Laser()
+    {
+        if (!lineRenderer.enabled)
+            lineRenderer.enabled = true;
+
+        lineRenderer.SetPosition(0, firePoint.position);
+        lineRenderer.SetPosition(1, target.position);
     }
 }
